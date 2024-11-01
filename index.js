@@ -3,10 +3,15 @@ const exphbs = require("express-handlebars");
 const session = require("express-session");
 const FileStore = require("session-file-store")(session);
 const flash = require("express-flash");
-const conn = require("./db/conn");
 
 const port = 3000;
+
+const conn = require("./db/conn");
 const app = express();
+
+//MODELS
+const Tought = require("./models/Tought");
+const User = require("./models/User");
 
 //config template engine
 app.engine("handlebars", exphbs.engine());
@@ -58,6 +63,6 @@ app.use((req, res, next) => {
 });
 
 conn
-  .sync()
+  .sync({ force: true })
   .then(() => app.listen(port))
   .catch((err) => console.error(err));
