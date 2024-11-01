@@ -5,11 +5,13 @@ const FileStore = require("session-file-store")(session);
 const flash = require("express-flash");
 
 const port = 3000;
-
-const ToughtsController = require("./controllers/ToughtsController");
-const toughtsRoutes = require("./routes/toughtsRoutes");
 const conn = require("./db/conn");
 const app = express();
+
+// import routes
+const ToughtsController = require("./controllers/ToughtsController");
+const toughtsRoutes = require("./routes/toughtsRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 //MODELS
 const Tought = require("./models/Tought");
@@ -65,8 +67,9 @@ app.use((req, res, next) => {
 });
 
 //Routes
-app.get("/", ToughtsController.showToughts); //rota padrão
 app.use("/toughts", toughtsRoutes);
+app.use("/", authRoutes);
+app.get("/", ToughtsController.showToughts); //rota padrão
 
 conn
   .sync()
