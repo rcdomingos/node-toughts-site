@@ -6,6 +6,8 @@ const flash = require("express-flash");
 
 const port = 3000;
 
+const ToughtsController = require("./controllers/ToughtsController");
+const toughtsRoutes = require("./routes/toughtsRoutes");
 const conn = require("./db/conn");
 const app = express();
 
@@ -18,6 +20,9 @@ app.engine("handlebars", exphbs.engine());
 app.set("view engine", "handlebars");
 
 // config midlewares
+// public path
+app.use(express.static("public"));
+
 // json request body
 app.use(
   express.urlencoded({
@@ -47,11 +52,8 @@ app.use(
   })
 );
 
-//flash messages
-app.use(flash);
-
-// public path
-app.use(express.static("public"));
+// flash messages
+app.use(flash());
 
 // set sessions
 app.use((req, res, next) => {
@@ -62,7 +64,11 @@ app.use((req, res, next) => {
   next();
 });
 
+//Routes
+app.get("/", ToughtsController.showToughts); //rota padrão
+app.use("/toughts", toughtsRoutes);
+
 conn
-  .sync({ force: true })
+  .sync()
   .then(() => app.listen(port))
   .catch((err) => console.error(err));
