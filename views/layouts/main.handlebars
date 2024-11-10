@@ -23,6 +23,12 @@
       </ul>
     </nav>
     <div class="container">
+      <!--flash messages -->
+      {{#if messages.message}}
+        <div class="flash-message">
+          {{messages.message}}
+        </div>
+      {{/if}}      
       {{{body}}}
     </div>
     <footer>

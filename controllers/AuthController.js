@@ -1,3 +1,6 @@
+const User = require("../models/User");
+const bcrypt = require("bcryptjs");
+
 class AuthController {
   /**
    * @function login
@@ -13,6 +16,18 @@ class AuthController {
   static registrer(req, res) {
     res.render("auth/register");
   }
+
+  static registrerUser(req, res) {
+   const { name, email, password, passwordConfirm } = req.body;
+
+   // password match validation
+   if (password !== passwordConfirm) {
+     req.flash("message", "Senhas não conferem, tente novamente!");
+     res.render("auth/register");
+     return;
+   }
+  }
 }
+
 
 module.exports = AuthController;
