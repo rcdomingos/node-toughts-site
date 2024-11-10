@@ -18,8 +18,15 @@
       </a>
       <ul>
         <li><a href="/">Pensamentos</a></li>
-        <li><a href="/login">Entrar</a></li>
-        <li><a href="/register">Registrar</a></li>
+        <!-- URLs apos login -->
+        {{#if session.userId}}
+          <li><a href="/toughts/dashboard">Dashboard</a></li>
+          <li><a href="/logout">Sair</a></li>
+        {{else}}
+          <li><a href="/login">Entrar</a></li>
+          <li><a href="/register">Registrar</a></li>
+        {{/if}}
+
       </ul>
     </nav>
     <div class="container">
@@ -28,7 +35,7 @@
         <div class="flash-message">
           {{messages.message}}
         </div>
-      {{/if}}      
+      {{/if}}
       {{{body}}}
     </div>
     <footer>
