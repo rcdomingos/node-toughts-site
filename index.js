@@ -59,7 +59,7 @@ app.use(flash());
 
 // set sessions
 app.use((req, res, next) => {
-  if (req.session.userid) {
+  if (req.session.userId) {
     //reutilizar a sessão da requisição na respota
     res.locals.session = req.session;
   }

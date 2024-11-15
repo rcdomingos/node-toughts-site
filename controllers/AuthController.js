@@ -52,6 +52,7 @@ class AuthController {
 
       // inicializar a sessao
       req.session.userId = createdUser.id;
+      console.log(`User id: ${req.session.userId}`);
       // salvar a sessao
       req.session.save(() => {
         res.redirect("/toughts");
@@ -62,6 +63,38 @@ class AuthController {
       res.render("auth/register");
       return;
     }
+  }
+
+  static logout(req, res) {
+    req.session.destroy();
+    res.redirect("/login");
+  }
+
+  static async loginUser(req, res) {
+    const { email, password } = req.body;
+
+    //find user by email
+    const user = await User.findOne({ where: { email: email } });
+
+    // verify if user exists and passaword is valid
+    if (user) {
+      const isPasswordValid = bcrypt.compareSync(password, user.password);
+      if (isPasswordValid) {
+        console.log("User and Password valid");
+        req.session.userId = user.id;
+        req.session.save(() => {
+          res.redirect("/toughts");
+        });
+        return;
+      }
+      console.log("Password Invalid");
+    } else {
+      console.log("User not found");
+    }
+
+    req.flash("message", "Usuario ou senha incorretos!");
+    res.render("auth/login");
+    return;
   }
 }
 
